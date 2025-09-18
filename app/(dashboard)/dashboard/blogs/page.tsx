@@ -31,6 +31,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
+import { RichTextEditor } from "@/components/ui/rich-text-editor";
 import {
   Plus,
   Pencil,
@@ -151,10 +152,18 @@ interface BlogFormProps {
   ) => void;
   onSelectChange: (name: string, value: string | number) => void;
   onTagsChange: (tags: string[]) => void;
+  onContentChange: (content: string) => void;
 }
 
 const BlogForm: React.FC<BlogFormProps> = React.memo(
-  ({ formData, categories, onChange, onSelectChange, onTagsChange }) => {
+  ({
+    formData,
+    categories,
+    onChange,
+    onSelectChange,
+    onTagsChange,
+    onContentChange,
+  }) => {
     return (
       <div className="space-y-4">
         {/* Title */}
@@ -282,18 +291,17 @@ const BlogForm: React.FC<BlogFormProps> = React.memo(
         </div>
 
         {/* Content */}
-        <div className="grid grid-cols-4 items-center gap-4">
-          <Label htmlFor="content" className="text-right">
+        <div className="grid grid-cols-4 items-start gap-4">
+          <Label htmlFor="content" className="text-right pt-2">
             Content
           </Label>
-          <Textarea
-            id="content"
-            name="content"
-            value={formData.content}
-            onChange={onChange}
-            className="col-span-3 h-32"
-            placeholder="Enter rich content here"
-          />
+          <div className="col-span-3">
+            <RichTextEditor
+              content={formData.content}
+              onChange={onContentChange}
+              placeholder="Enter rich content here"
+            />
+          </div>
         </div>
       </div>
     );
@@ -306,35 +314,38 @@ const PreviewModal: React.FC<{
   open: boolean;
   onClose: () => void;
 }> = ({ blog, open, onClose }) => {
-  
-  return(
-  <Dialog open={open} onOpenChange={onClose}>
-    <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
-      <DialogHeader>
-        <DialogTitle>Preview: {blog.title}</DialogTitle>
-      </DialogHeader>
-      <div className="space-y-4">
-        {blog.coverImage && (
-          <img
-            src={blog.coverImage}
-            alt={blog.title}
-            className="w-full h-48 object-cover rounded"
+  return (
+    <Dialog open={open} onOpenChange={onClose}>
+      <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle>Preview: {blog.title}</DialogTitle>
+        </DialogHeader>
+        <div className="space-y-4">
+          {blog.coverImage && (
+            <img
+              src={blog.coverImage}
+              alt={blog.title}
+              className="w-full h-48 object-cover rounded"
+            />
+          )}
+          <h1 className="text-2xl font-bold">{blog.title}</h1>
+          <p className="text-sm text-muted-foreground">By {blog.author}</p>
+          <div className="flex flex-wrap gap-2 mb-4">
+            {blog.tags.map((tag, index) => (
+              <Badge key={index} variant="outline">
+                {tag}
+              </Badge>
+            ))}
+          </div>
+          <div
+            className="prose max-w-none"
+            dangerouslySetInnerHTML={{ __html: blog.content }}
           />
-        )}
-        <h1 className="text-2xl font-bold">{blog.title}</h1>
-        <p className="text-sm text-muted-foreground">By {blog.author}</p>
-        <div className="flex flex-wrap gap-2 mb-4">
-          {blog.tags.map((tag, index) => (
-            <Badge key={index} variant="outline">
-              {tag}
-            </Badge>
-          ))}
         </div>
-        <div className="prose max-w-none">{blog.content}</div>
-      </div>
-    </DialogContent>
-  </Dialog>
-)};
+      </DialogContent>
+    </Dialog>
+  );
+};
 
 // ------------------- Blogs Page -------------------
 export default function BlogsPage() {
@@ -447,6 +458,10 @@ export default function BlogsPage() {
 
   const handleTagsChange = useCallback((tags: string[]) => {
     setFormData((prev) => ({ ...prev, tags }));
+  }, []);
+
+  const handleContentChange = useCallback((content: string) => {
+    setFormData((prev) => ({ ...prev, content }));
   }, []);
 
   const handleSubmit = async () => {
@@ -768,6 +783,7 @@ export default function BlogsPage() {
             onChange={handleInputChange}
             onSelectChange={handleSelectChange}
             onTagsChange={handleTagsChange}
+            onContentChange={handleContentChange}
           />
 
           <DialogFooter>
