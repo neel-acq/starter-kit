@@ -1,6 +1,13 @@
 import { desc, and, eq, isNull } from "drizzle-orm";
 import { db } from "./drizzle";
-import { activityLogs, teamMembers, teams, users, categories } from "./schema";
+import {
+  activityLogs,
+  teamMembers,
+  teams,
+  users,
+  categories,
+  blogs,
+} from "./schema";
 import { cookies } from "next/headers";
 import { verifyToken } from "@/lib/auth/session";
 
@@ -175,4 +182,119 @@ export async function updateCategory(
 
 export async function deleteCategory(id: number) {
   await db.delete(categories).where(eq(categories.id, id));
+}
+
+// Blogs queries
+
+export async function getBlogs() {
+  return await db
+    .select({
+      id: blogs.id,
+      title: blogs.title,
+      slug: blogs.slug,
+      content: blogs.content,
+      coverImage: blogs.coverImage,
+      author: blogs.author,
+      tags: blogs.tags,
+      categoryId: blogs.categoryId,
+      status: blogs.status,
+      createdAt: blogs.createdAt,
+      updatedAt: blogs.updatedAt,
+      category: {
+        id: categories.id,
+        name: categories.name,
+      },
+    })
+    .from(blogs)
+    .leftJoin(categories, eq(blogs.categoryId, categories.id))
+    .orderBy(desc(blogs.createdAt));
+}
+
+export async function getBlogById(id: number) {
+  const result = await db
+    .select({
+      id: blogs.id,
+      title: blogs.title,
+      slug: blogs.slug,
+      content: blogs.content,
+      coverImage: blogs.coverImage,
+      author: blogs.author,
+      tags: blogs.tags,
+      categoryId: blogs.categoryId,
+      status: blogs.status,
+      createdAt: blogs.createdAt,
+      updatedAt: blogs.updatedAt,
+      category: {
+        id: categories.id,
+        name: categories.name,
+      },
+    })
+    .from(blogs)
+    .leftJoin(categories, eq(blogs.categoryId, categories.id))
+    .where(eq(blogs.id, id))
+    .limit(1);
+  return result.length > 0 ? result[0] : null;
+}
+
+export async function createBlog(data: {
+  title: string;
+  slug: string;
+  content: string;
+  coverImage?: string;
+  author: string;
+  tags: string;
+  categoryId: number;
+  status: string;
+}) {
+  const now = new Date();
+  const [newBlog] = await db
+    .insert(blogs)
+    .values({
+      title: data.title,
+      slug: data.slug,
+      content: data.content,
+      coverImage: data.coverImage,
+      author: data.author,
+      tags: data.tags,
+      categoryId: data.categoryId,
+      status: data.status,
+      createdAt: now,
+      updatedAt: now,
+    })
+    .returning();
+  return newBlog;
+}
+
+export async function updateBlog(
+  id: number,
+  data: {
+    title: string;
+    slug: string;
+    content: string;
+    coverImage?: string;
+    author: string;
+    tags: string;
+    categoryId: number;
+    status: string;
+  }
+) {
+  const now = new Date();
+  await db
+    .update(blogs)
+    .set({
+      title: data.title,
+      slug: data.slug,
+      content: data.content,
+      coverImage: data.coverImage,
+      author: data.author,
+      tags: data.tags,
+      categoryId: data.categoryId,
+      status: data.status,
+      updatedAt: now,
+    })
+    .where(eq(blogs.id, id));
+}
+
+export async function deleteBlog(id: number) {
+  await db.delete(blogs).where(eq(blogs.id, id));
 }

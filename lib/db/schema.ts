@@ -76,6 +76,22 @@ export const categories = pgTable("categories", {
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });
 
+export const blogs = pgTable("blogs", {
+  id: serial("id").primaryKey(),
+  title: varchar("title", { length: 255 }).notNull(),
+  slug: varchar("slug", { length: 255 }).notNull().unique(),
+  content: text("content").notNull(),
+  coverImage: text("cover_image"),
+  author: varchar("author", { length: 100 }).notNull(),
+  tags: text("tags").notNull().default("[]"), // JSON string array
+  categoryId: integer("category_id")
+    .notNull()
+    .references(() => categories.id),
+  status: varchar("status", { length: 20 }).notNull().default("draft"),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+});
+
 export const teamsRelations = relations(teams, ({ many }) => ({
   teamMembers: many(teamMembers),
   activityLogs: many(activityLogs),
@@ -120,6 +136,17 @@ export const activityLogsRelations = relations(activityLogs, ({ one }) => ({
   }),
 }));
 
+export const categoriesRelations = relations(categories, ({ many }) => ({
+  blogs: many(blogs),
+}));
+
+export const blogsRelations = relations(blogs, ({ one }) => ({
+  category: one(categories, {
+    fields: [blogs.categoryId],
+    references: [categories.id],
+  }),
+}));
+
 export type User = typeof users.$inferSelect;
 export type NewUser = typeof users.$inferInsert;
 export type Team = typeof teams.$inferSelect;
@@ -130,6 +157,10 @@ export type ActivityLog = typeof activityLogs.$inferSelect;
 export type NewActivityLog = typeof activityLogs.$inferInsert;
 export type Invitation = typeof invitations.$inferSelect;
 export type NewInvitation = typeof invitations.$inferInsert;
+export type Category = typeof categories.$inferSelect;
+export type NewCategory = typeof categories.$inferInsert;
+export type Blog = typeof blogs.$inferSelect;
+export type NewBlog = typeof blogs.$inferInsert;
 export type TeamDataWithMembers = Team & {
   teamMembers: (TeamMember & {
     user: Pick<User, "id" | "name" | "email">;
