@@ -1,17 +1,17 @@
-'use client';
+"use client";
 
-import * as React from 'react';
-import { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import * as React from "react";
+import { useState, useEffect, useCallback } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from "@/components/ui/select";
 import {
   Table,
   TableBody,
@@ -19,7 +19,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
+} from "@/components/ui/table";
 import {
   Dialog,
   DialogContent,
@@ -27,85 +27,123 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
-import { Badge } from '@/components/ui/badge';
-import { PlusCircle, Pencil, Trash2 } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+} from "@/components/ui/dialog";
+import { Badge } from "@/components/ui/badge";
+import { PlusCircle, Pencil, Trash2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 
-// Mock data for categories (replace with actual API calls in implementation)
 interface Category {
   id: number;
   name: string;
-  status: 'active' | 'inactive';
+  status: "active" | "inactive";
 }
 
-const mockCategories: Category[] = [
-  { id: 1, name: 'Technology', status: 'active' },
-  { id: 2, name: 'Web Development', status: 'active' },
-  { id: 3, name: 'Lifestyle', status: 'inactive' },
-];
-
-// Main Categories page component
 export default function CategoriesPage() {
-  const [categories, setCategories] = useState<Category[]>(mockCategories);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<Category | null>(
+    null
+  );
   const [formData, setFormData] = useState({
-    name: '',
-    status: 'active' as 'active' | 'inactive',
+    name: "",
+    status: "active" as "active" | "inactive",
   });
 
   const router = useRouter();
 
-  // Handle form input changes
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    if (name === 'name') {
-      setFormData({
-        ...formData,
-        [name]: value,
-      });
-    } else {
-      setFormData({ ...formData, [name]: value });
+  // Fetch categories from API
+  const fetchCategories = async () => {
+    try {
+      const response = await fetch("/api/categories");
+      if (!response.ok) {
+        throw new Error("Failed to fetch categories");
+      }
+      const data = await response.json();
+      setCategories(data);
+    } catch (error) {
+      console.error(error);
     }
   };
 
+  // Load categories on component mount
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+
+  // Handle form input changes
+  const handleInputChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const { name, value } = e.target;
+      setFormData((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    },
+    []
+  );
+
+  // Handle status change
+  const handleStatusChange = useCallback((value: "active" | "inactive") => {
+    setFormData((prev) => ({ ...prev, status: value }));
+  }, []);
+
   // Handle add category
-  const handleAddCategory = () => {
-    // Mock add operation (replace with API call)
-    const newCategory = {
-      id: categories.length + 1,
-      ...formData,
-    };
-    setCategories([...categories, newCategory]);
-    setIsAddModalOpen(false);
-    setFormData({ name: '', status: 'active' });
+  const handleAddCategory = async () => {
+    try {
+      const response = await fetch("/api/categories", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+      if (!response.ok) {
+        throw new Error("Failed to add category");
+      }
+      await fetchCategories();
+      setIsAddModalOpen(false);
+      setFormData({ name: "", status: "active" });
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   // Handle edit category
-  const handleEditCategory = () => {
-    if (selectedCategory) {
-      // Mock update operation (replace with API call)
-      setCategories(
-        categories.map((cat) =>
-          cat.id === selectedCategory.id ? { ...cat, ...formData } : cat
-        )
-      );
+  const handleEditCategory = async () => {
+    if (!selectedCategory) return;
+    try {
+      const response = await fetch(`/api/categories/${selectedCategory.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+      if (!response.ok) {
+        throw new Error("Failed to update category");
+      }
+      await fetchCategories();
       setIsEditModalOpen(false);
-      setFormData({ name: '', status: 'active' });
+      setFormData({ name: "", status: "active" });
       setSelectedCategory(null);
+    } catch (error) {
+      console.error(error);
     }
   };
 
   // Handle delete category
-  const handleDeleteCategory = () => {
-    if (selectedCategory) {
-      // Mock delete operation (replace with API call)
-      setCategories(categories.filter((cat) => cat.id !== selectedCategory.id));
+  const handleDeleteCategory = async () => {
+    if (!selectedCategory) return;
+    try {
+      const response = await fetch(`/api/categories/${selectedCategory.id}`, {
+        method: "DELETE",
+      });
+      if (!response.ok) {
+        throw new Error("Failed to delete category");
+      }
+      await fetchCategories();
       setIsDeleteModalOpen(false);
       setSelectedCategory(null);
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -120,40 +158,48 @@ export default function CategoriesPage() {
   };
 
   // Category form component for add/edit
-  const CategoryForm = ({ isEdit = false }: { isEdit?: boolean }) => (
-    <div className="grid gap-4 py-4">
-      <div className="grid grid-cols-4 items-center gap-4">
-        <Label htmlFor="name" className="text-right">
-          Name
-        </Label>
-        <Input
-          id="name"
-          name="name"
-          value={formData.name}
-          onChange={handleInputChange}
-          className="col-span-3"
-        />
+  const CategoryForm = React.memo(
+    ({
+      formData,
+      onInputChange,
+      onStatusChange,
+      isEdit = false,
+    }: {
+      formData: { name: string; status: "active" | "inactive" };
+      onInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+      onStatusChange: (value: "active" | "inactive") => void;
+      isEdit?: boolean;
+    }) => (
+      <div className="grid gap-4 py-4">
+        <div className="grid grid-cols-4 items-center gap-4">
+          <Label htmlFor="name" className="text-right">
+            Name
+          </Label>
+          <Input
+            id="name"
+            name="name"
+            value={formData.name}
+            onChange={onInputChange}
+            className="col-span-3"
+            autoFocus
+          />
+        </div>
+        <div className="grid grid-cols-4 items-center gap-4">
+          <Label htmlFor="status" className="text-right">
+            Status
+          </Label>
+          <Select value={formData.status} onValueChange={onStatusChange}>
+            <SelectTrigger className="col-span-3">
+              <SelectValue placeholder="Select status" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="active">Active</SelectItem>
+              <SelectItem value="inactive">Inactive</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
       </div>
-      <div className="grid grid-cols-4 items-center gap-4">
-        <Label htmlFor="status" className="text-right">
-          Status
-        </Label>
-        <Select
-          value={formData.status}
-          onValueChange={(value) =>
-            setFormData({ ...formData, status: value as 'active' | 'inactive' })
-          }
-        >
-          <SelectTrigger className="col-span-3">
-            <SelectValue placeholder="Select status" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="active">Active</SelectItem>
-            <SelectItem value="inactive">Inactive</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
-    </div>
+    )
   );
 
   return (
@@ -179,7 +225,11 @@ export default function CategoriesPage() {
             <TableRow key={category.id}>
               <TableCell>{category.name}</TableCell>
               <TableCell>
-                <Badge variant={category.status === 'active' ? 'default' : 'secondary'}>
+                <Badge
+                  variant={
+                    category.status === "active" ? "default" : "secondary"
+                  }
+                >
                   {category.status}
                 </Badge>
               </TableCell>
@@ -218,7 +268,11 @@ export default function CategoriesPage() {
               Fill in the details to create a new blog category.
             </DialogDescription>
           </DialogHeader>
-          <CategoryForm />
+          <CategoryForm
+            formData={formData}
+            onInputChange={handleInputChange}
+            onStatusChange={handleStatusChange}
+          />
           <DialogFooter>
             <Button variant="outline" onClick={() => setIsAddModalOpen(false)}>
               Cancel
@@ -237,7 +291,12 @@ export default function CategoriesPage() {
               Update the details for the selected blog category.
             </DialogDescription>
           </DialogHeader>
-          <CategoryForm isEdit />
+          <CategoryForm
+            isEdit
+            formData={formData}
+            onInputChange={handleInputChange}
+            onStatusChange={handleStatusChange}
+          />
           <DialogFooter>
             <Button variant="outline" onClick={() => setIsEditModalOpen(false)}>
               Cancel
@@ -253,12 +312,15 @@ export default function CategoriesPage() {
           <DialogHeader>
             <DialogTitle>Delete Category</DialogTitle>
             <DialogDescription>
-              Are you sure you want to delete the category "{selectedCategory?.name}"? This action
-              cannot be undone.
+              Are you sure you want to delete the category "
+              {selectedCategory?.name}"? This action cannot be undone.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsDeleteModalOpen(false)}>
+            <Button
+              variant="outline"
+              onClick={() => setIsDeleteModalOpen(false)}
+            >
               Cancel
             </Button>
             <Button variant="destructive" onClick={handleDeleteCategory}>
