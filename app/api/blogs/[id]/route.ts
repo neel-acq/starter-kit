@@ -3,10 +3,11 @@ import { getBlogById, updateBlog, deleteBlog } from "@/lib/db/queries";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const blog = await getBlogById(parseInt(params.id));
+    const { id } = await params;
+    const blog = await getBlogById(parseInt(id));
     if (!blog) {
       return NextResponse.json({ error: "Blog not found" }, { status: 404 });
     }
@@ -22,9 +23,10 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const body = await request.json();
     const {
       title,
@@ -44,7 +46,7 @@ export async function PUT(
       );
     }
 
-    await updateBlog(parseInt(params.id), {
+    await updateBlog(parseInt(id), {
       title,
       slug,
       content,
@@ -67,10 +69,11 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    await deleteBlog(parseInt(params.id));
+    const { id } = await params;
+    await deleteBlog(parseInt(id));
     return NextResponse.json({ message: "Blog deleted successfully" });
   } catch (error) {
     console.error("Error deleting blog:", error);

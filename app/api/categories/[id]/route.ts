@@ -7,15 +7,16 @@ import {
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const id = parseInt(params.id);
-    if (isNaN(id)) {
+    const { id } = await params;
+    const categoryId = parseInt(id);
+    if (isNaN(categoryId)) {
       return NextResponse.json({ error: "Invalid ID" }, { status: 400 });
     }
 
-    const category = await getCategoryById(id);
+    const category = await getCategoryById(categoryId);
     if (!category) {
       return NextResponse.json(
         { error: "Category not found" },
@@ -35,11 +36,12 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const id = parseInt(params.id);
-    if (isNaN(id)) {
+    const { id } = await params;
+    const categoryId = parseInt(id);
+    if (isNaN(categoryId)) {
       return NextResponse.json({ error: "Invalid ID" }, { status: 400 });
     }
 
@@ -53,7 +55,7 @@ export async function PUT(
       );
     }
 
-    await updateCategory(id, { name, status });
+    await updateCategory(categoryId, { name, status });
     return NextResponse.json({ message: "Category updated successfully" });
   } catch (error) {
     console.error("Error updating category:", error);
@@ -66,15 +68,16 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const id = parseInt(params.id);
-    if (isNaN(id)) {
+    const { id } = await params;
+    const categoryId = parseInt(id);
+    if (isNaN(categoryId)) {
       return NextResponse.json({ error: "Invalid ID" }, { status: 400 });
     }
 
-    await deleteCategory(id);
+    await deleteCategory(categoryId);
     return NextResponse.json({ message: "Category deleted successfully" });
   } catch (error) {
     console.error("Error deleting category:", error);
