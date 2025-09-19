@@ -49,7 +49,12 @@ content:
       - { name: title, label: Title, type: string, required: true }
       - { name: excerpt, label: Excerpt, type: string }
       - { name: coverImage, label: Cover Image, type: image }
-      - { name: date, label: Date, type: date, options: { format: "yyyy-MM-dd" } }
+      - {
+          name: date,
+          label: Date,
+          type: date,
+          options: { format: "yyyy-MM-dd" },
+        }
       - { name: body, label: Body, type: rich-text }
 
   # Subscription Section (single file)
@@ -65,14 +70,10 @@ content:
   # Footer Section (single file, with repeatable links)
   - name: footer
     label: Footer
-    type: file
-    path: content/pages/footer.md
+    type: collection
+    path: content/footer
+    view:
+      fields: [label, url]
     fields:
-      - { name: copyright, label: Copyright, type: string }
-      - name: links
-        label: Footer Links
-        type: list
-        itemLabel: label
-        fields:
-          - { name: label, label: Label, type: string }
-          - { name: url, label: URL, type: string }
+      - { name: label, label: Label, type: string, required: true }
+      - { name: url, label: URL, type: string, required: true }
