@@ -4,9 +4,7 @@ content:
     type: file
     path: "content/pages/landing.md"
     fields:
-      # =============================
-      # Section 1: Hero Section
-      # =============================
+      # Hero Section
       - name: hero
         label: "Hero Section"
         type: object
@@ -33,12 +31,11 @@ content:
                 label: Redirect URL
                 type: string
 
-      # =============================
-      # Section 2: Features (Multiple)
-      # =============================
+      # Features Section (list)
       - name: features
         label: "Features Section"
         type: list
+        labelField: text # 👈 show "text" as the label in UI
         fields:
           - name: text
             label: Title Text
@@ -62,12 +59,11 @@ content:
                 label: Redirect URL
                 type: string
 
-      # =============================
-      # Section 3: Footer Links (Multiple)
-      # =============================
+      # Footer Links (list)
       - name: footer
         label: "Footer Links"
         type: list
+        labelField: label # 👈 show "label" as the label in UI
         fields:
           - name: label
             label: Link Label
