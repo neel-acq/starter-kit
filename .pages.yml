@@ -15,7 +15,7 @@ content:
           - { name: description, label: Description, type: text, required: true }
           - { name: backgroundImage, label: Background Image, type: image, required: false }
           - name: cta
-            label: CTA Button (optional)
+            label: CTA Button
             type: object
             required: false
             fields:
@@ -23,18 +23,18 @@ content:
               - { name: url, label: Redirect URL, type: string }
 
       # =============================
-      # Section 2: Features (list)
+      # Section 2: Features Section
       # =============================
       - name: features
         label: Features Section
         type: list
-        labelField: text
+        labelField: text     # 👈 show the feature title in UI
         fields:
-          - { name: text, label: Title Text, type: string, required: true }
+          - { name: text, label: Feature Title, type: string, required: true }
           - { name: description, label: Description, type: text, required: true }
           - { name: image, label: Image, type: image, required: false }
           - name: cta
-            label: CTA Button (optional)
+            label: CTA Button
             type: object
             required: false
             fields:
@@ -42,12 +42,12 @@ content:
               - { name: url, label: Redirect URL, type: string }
 
       # =============================
-      # Section 3: Footer Links (list)
+      # Section 3: Footer Links
       # =============================
       - name: footer
         label: Footer Links
         type: list
-        labelField: label
+        labelField: label    # 👈 show the footer link label in UI
         fields:
           - { name: label, label: Link Label, type: string, required: true }
           - { name: url, label: Link URL, type: string, required: true }

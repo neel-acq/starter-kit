@@ -24,8 +24,7 @@ features:
 
   - text: "Analytics"
     description: "Track user behavior and conversion with built-in tools."
-    image: "/uploads/analytics.png"
-    # no CTA button here (optional)
+    # image and CTA omitted → both optional
 
 footer:
   - label: "Privacy Policy"
