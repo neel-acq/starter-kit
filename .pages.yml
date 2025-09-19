@@ -1,16 +1,15 @@
----
-title: "Build SaaS Faster"
-description: "Kickstart your startup with our Next.js starter kit."
-cta:
-  label: "Get Started"
-  url: "/signup"
-
-todos:
-  - task: "Set up project repo"
-    done: true
-  - task: "Install dependencies"
-    done: true
-  - task: "Deploy to Vercel"
-    done: false
----
-
+content:
+  - name: todos
+    label: "Todo List"
+    type: file
+    path: "content/todos.md"
+    fields:
+      - name: items
+        label: Todos
+        type: list
+        labelField: title   # 👈 show todo title in UI
+        fields:
+          - { name: title, label: Title, type: string, required: true }
+          - { name: description, label: Description, type: text, required: false }
+          - { name: completed, label: Completed, type: boolean, required: false }
+          - { name: dueDate, label: Due Date, type: datetime, required: false }
