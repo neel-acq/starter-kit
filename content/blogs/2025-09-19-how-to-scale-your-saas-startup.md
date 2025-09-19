@@ -2,6 +2,7 @@
 title: How to Scale Your SaaS Startup
 excerpt: Learn practical strategies to grow your SaaS business without
   compromising quality or team efficiency.
+coverImage: /assets/thought-catalog-505eectW54k-unsplash (1).jpg
 date: 2025-09-07
 ---
 \## Introduction
