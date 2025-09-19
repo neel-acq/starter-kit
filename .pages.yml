@@ -7,42 +7,63 @@
       label: Hero Section
       type: object
       fields:
-        - { name: title, label: Title, type: string, required: true }
-        - { name: description, label: Description, type: text }
-        - { name: backgroundImage, label: Background Image, type: image }
+        - name: title
+          label: Title
+          type: string
+        - name: description
+          label: Description
+          type: text
+        - name: backgroundImage
+          label: Background Image
+          type: image
         - name: cta
           label: CTA Button
           type: object
           fields:
-            - { name: label, label: Button Label, type: string }
-            - { name: url, label: Redirect URL, type: string }
+            - name: label
+              label: Button Label
+              type: string
+            - name: url
+              label: Redirect URL
+              type: string
 
     - name: features
       label: Features Section
       type: list
+      itemLabel: title       # <-- important: fixes [object Object]
       fields:
-        - { name: title, label: Title, type: string, required: true }
-        - { name: description, label: Description, type: text }
-        - { name: image, label: Image, type: image }
+        - name: title
+          label: Title
+          type: string
+        - name: description
+          label: Description
+          type: text
+        - name: image
+          label: Image
+          type: image
         - name: cta
           label: CTA Button
           type: object
           fields:
-            - { name: label, label: Button Label, type: string }
-            - { name: url, label: Redirect URL, type: string }
+            - name: label
+              label: Button Label
+              type: string
+            - name: url
+              label: Redirect URL
+              type: string
 
     - name: testimonials
-      label: Testimonials Section
+      label: Testimonials
       type: list
+      itemLabel: name        # <-- important: fixes [object Object]
       fields:
-        - { name: name, label: Name, type: string, required: true }
-        - { name: role, label: Role, type: string }
-        - { name: feedback, label: Feedback, type: text }
-        - { name: avatar, label: Avatar, type: image }
-
-    - name: footer
-      label: Footer Links
-      type: list
-      fields:
-        - { name: label, label: Link Label, type: string, required: true }
-        - { name: url, label: Link URL, type: string, required: true }
+        - name: name
+          label: Name
+          type: string
+        - name: role
+          label: Role
+          type: string
+        - name: feedback
+          label: Feedback
+          type: text
+        - name: avatar
