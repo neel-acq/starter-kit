@@ -2,7 +2,7 @@
 title: Top 5 Productivity Tools for SaaS Teams
 excerpt: Boost your team's efficiency with the essential productivity tools
   every SaaS company should know.
-coverImage: /assets/ChatGPT Image Jul 24, 2025, 11_53_41 AM.png
+coverImage: /assets/ian-dooley-DJ7bWa-Gwks-unsplash.jpg
 date: 1973-03-09
 ---
 \## Introduction
