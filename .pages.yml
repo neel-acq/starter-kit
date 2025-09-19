@@ -4,24 +4,33 @@ media:
   categories: ["image"]
 
 content:
-  # Hero Section (single file)
-  - name: hero
-    label: Hero Section
+  # Homepage with all sections inside
+  - name: homepage
+    label: Homepage
     type: file
-    path: content/pages/hero.md
+    path: content/pages/homepage.md
     fields:
-      - { name: title, label: Title, type: string, required: true }
-      - { name: description, label: Description, type: text }
-      - { name: backgroundImage, label: Background Image, type: image }
-      - name: cta
-        label: CTA Button
+      # ================================
+      # Hero Section
+      # ================================
+      - name: hero
+        label: Hero Section
         type: object
         fields:
-          - { name: label, label: Button Label, type: string }
-          - { name: url, label: Redirect URL, type: string }
+          - { name: title, label: Title, type: string, required: true }
+          - { name: description, label: Description, type: text }
+          - { name: backgroundImage, label: Background Image, type: image }
+          - name: cta
+            label: CTA Button
+            type: object
+            fields:
+              - { name: label, label: Button Label, type: string }
+              - { name: url, label: Redirect URL, type: string }
 
-  # Features Section (collection = multiple items, todo-like)
-  - name: features
+      # ================================
+      # Features Section (list = collection style inside homepage)
+      # ================================
+      - name: features
     label: Features
     type: collection
     path: content/features
@@ -38,41 +47,43 @@ content:
           - { name: label, label: Button Label, type: string }
           - { name: url, label: Redirect URL, type: string }
 
-  # Blogs (collection = multiple items)
-  - name: blogs
-    label: Blogs
-    type: collection
-    path: content/blogs
-    view:
-      fields: [title, date]
-    fields:
-      - { name: title, label: Title, type: string, required: true }
-      - { name: excerpt, label: Excerpt, type: string }
-      - { name: coverImage, label: Cover Image, type: image }
-      - { name: date, label: Date, type: date, options: { format: "yyyy-MM-dd" } }
-      - { name: body, label: Body, type: rich-text }
-
-  # Subscription Section (single file)
-  - name: subscription
-    label: Subscription
-    type: file
-    path: content/pages/subscription.md
-    fields:
-      - { name: title, label: Title, type: string }
-      - { name: description, label: Description, type: text }
-      - { name: buttonLabel, label: Button Label, type: string }
-
-  # Footer Section (single file, with repeatable links)
-  - name: footer
-    label: Footer
-    type: file
-    path: content/pages/footer.md
-    fields:
-      - { name: copyright, label: Copyright, type: string }
-      - name: links
-        label: Footer Links
+      # ================================
+      # Blogs Section (repeatable posts)
+      # ================================
+      - name: blogs
+        label: Blogs Section
         type: list
-        itemLabel: label
+        itemLabel: title
         fields:
-          - { name: label, label: Label, type: string }
-          - { name: url, label: URL, type: string }
+          - { name: title, label: Title, type: string, required: true }
+          - { name: excerpt, label: Excerpt, type: string }
+          - { name: coverImage, label: Cover Image, type: image }
+          - { name: date, label: Date, type: date, options: { format: "yyyy-MM-dd" } }
+          - { name: body, label: Body, type: rich-text }
+
+      # ================================
+      # Subscription Section
+      # ================================
+      - name: subscription
+        label: Subscription Section
+        type: object
+        fields:
+          - { name: title, label: Title, type: string }
+          - { name: description, label: Description, type: text }
+          - { name: buttonLabel, label: Button Label, type: string }
+
+      # ================================
+      # Footer Section
+      # ================================
+      - name: footer
+        label: Footer Section
+        type: object
+        fields:
+          - { name: copyright, label: Copyright, type: string }
+          - name: links
+            label: Footer Links
+            type: list
+            itemLabel: label
+            fields:
+              - { name: label, label: Label, type: string }
+              - { name: url, label: URL, type: string }
