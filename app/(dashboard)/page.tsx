@@ -3,8 +3,17 @@ import BlogList from "@/components/landing/BlogList";
 import PricingPlans from "@/components/landing/PricingPlans";
 import ContactForm from "@/components/landing/ContactForm";
 import { Terminal } from "./terminal";
+import Footer from "@/components/landing/Footer";
+import fs from "fs";
+import path from "path";
+import matter from "gray-matter";
 
 export default function HomePage() {
+  const filePath = path.join(process.cwd(), "content/pages/landing.md");
+  const fileContent = fs.readFileSync(filePath, "utf-8");
+  const { data } = matter(fileContent);
+
+  const { section1, section2, footer } = data;
   return (
     <main>
       <Hero />
@@ -23,6 +32,7 @@ export default function HomePage() {
       <BlogList />
       <PricingPlans />
       <ContactForm />
+      {footer && <Footer text={footer.text} links={footer.links} />}
     </main>
   );
 }

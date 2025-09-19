@@ -1,0 +1,83 @@
+content:
+  - name: landing
+    label: "Landing Page"
+    type: file
+    path: "content/pages/landing.md"
+    fields:
+      # =============================
+      # Section 1: Hero
+      # =============================
+      - name: section1
+        label: "Hero Section"
+        type: object
+        fields:
+          - name: title
+            label: Title
+            type: string
+          - name: description
+            label: Description
+            type: text
+          - name: backgroundImage
+            label: Background Image
+            type: image
+          - name: cta
+            label: CTA Button (optional)
+            type: object
+            required: false
+            fields:
+              - name: label
+                label: Button Label
+                type: string
+              - name: url
+                label: Redirect URL
+                type: string
+
+      # =============================
+      # Section 2: Left-Right Content Blocks
+      # =============================
+      - name: section2
+        label: "Content Blocks"
+        type: list
+        fields:
+          - name: title
+            label: Title
+            type: string
+          - name: description
+            label: Description
+            type: text
+          - name: image
+            label: Image (optional)
+            type: image
+            required: false
+          - name: cta
+            label: CTA Button (optional)
+            type: object
+            required: false
+            fields:
+              - name: label
+                label: Button Label
+                type: string
+              - name: url
+                label: Redirect URL
+                type: string
+
+      # =============================
+      # Section 3: Footer
+      # =============================
+      - name: footer
+        label: "Footer"
+        type: object
+        fields:
+          - name: text
+            label: Footer Text
+            type: string
+          - name: links
+            label: Footer Links
+            type: list
+            fields:
+              - name: label
+                label: Link Label
+                type: string
+              - name: url
+                label: Redirect URL
+                type: string
