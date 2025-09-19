@@ -3,6 +3,9 @@
   path: content/pages/home.md
   type: file
   fields:
+    # =============================
+    # Hero Section
+    # =============================
     - name: hero
       label: Hero Section
       type: object
@@ -10,6 +13,7 @@
         - name: title
           label: Title
           type: string
+          required: true
         - name: description
           label: Description
           type: text
@@ -27,14 +31,18 @@
               label: Redirect URL
               type: string
 
+    # =============================
+    # Features Section
+    # =============================
     - name: features
       label: Features Section
       type: list
-      itemLabel: title       # <-- important: fixes [object Object]
+      itemLabel: title
       fields:
         - name: title
           label: Title
           type: string
+          required: true
         - name: description
           label: Description
           type: text
@@ -52,14 +60,18 @@
               label: Redirect URL
               type: string
 
+    # =============================
+    # Testimonials Section
+    # =============================
     - name: testimonials
       label: Testimonials
       type: list
-      itemLabel: name        # <-- important: fixes [object Object]
+      itemLabel: name
       fields:
         - name: name
           label: Name
           type: string
+          required: true
         - name: role
           label: Role
           type: string
@@ -67,3 +79,5 @@
           label: Feedback
           type: text
         - name: avatar
+          label: Avatar
+          type: image
