@@ -7,6 +7,7 @@ import Footer from "@/components/landing/Footer";
 import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
+import Features from "@/components/landing/Features";
 
 export default function HomePage() {
   const filePath = path.join(process.cwd(), "content/pages/landing.md");
@@ -14,6 +15,7 @@ export default function HomePage() {
   const { data } = matter(fileContent);
 
   const { section1, section2, footer } = data;
+  
   return (
     <main>
       <Hero />
@@ -28,7 +30,7 @@ export default function HomePage() {
           </div>
         </div>
       </div>
-
+      <Features/>
       <BlogList />
       <PricingPlans />
       <ContactForm />
