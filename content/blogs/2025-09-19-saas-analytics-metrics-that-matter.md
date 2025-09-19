@@ -2,6 +2,7 @@
 title: "SaaS Analytics: Metrics that Matter"
 excerpt: Discover the essential metrics every SaaS company should track to drive
   growth and reduce churn.
+coverImage: /assets/ales-nesetril-Im7lZjxeLhg-unsplash.jpg
 date: 2025-09-24
 ---
 \## Introduction
