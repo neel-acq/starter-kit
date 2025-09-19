@@ -1,12 +1,37 @@
 ---
-section1:
-  title: Fugiat labore fugiat
-  description: "Cillum id anim enim "
+hero:
+  title: "Build SaaS Faster"
+  description: "Kickstart your startup with our Next.js starter kit."
+  backgroundImage: "/uploads/hero-bg.png"
   cta:
-    label: Eos anim distinctio
-    url: Eu facilis ex tenetu
-section2: Necessitatibus qui e
+    label: "Get Started"
+    url: "/signup"
+
+features:
+  - text: "Authentication"
+    description: "Secure login with email & social auth built in."
+    image: "/uploads/auth.png"
+    cta:
+      label: "Learn More"
+      url: "/auth"
+
+  - text: "Payments"
+    description: "Integrated Stripe subscription billing and invoicing."
+    image: "/uploads/payments.png"
+    cta:
+      label: "See Pricing"
+      url: "/pricing"
+
+  - text: "Analytics"
+    description: "Track user behavior and conversion with built-in tools."
+    image: "/uploads/analytics.png"
+    # no CTA here (optional)
+
 footer:
-  text: SignIn
-  links: /sign-in
+  - label: "Privacy Policy"
+    url: "/privacy"
+  - label: "Terms of Service"
+    url: "/terms"
+  - label: "Contact Us"
+    url: "/contact"
 ---
