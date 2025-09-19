@@ -1,4 +1,4 @@
 ---
-label: Nulla aut vero et co
-url: Voluptas sed veritat
+label: Sign In
+url: /sign-in
 ---
