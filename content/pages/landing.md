@@ -1,7 +1,7 @@
 ---
 section1:
   title: Build SaaS Faster
-  description: Kickstart your startup with our Next.js starter kit. abcd
+  description: Kickstart your startup with our Next.js starter kit.
   backgroundImage: /uploads/hero-bg.png
   cta:
     label: Get Started
