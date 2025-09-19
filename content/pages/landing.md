@@ -7,6 +7,6 @@ section1:
     url: Eu facilis ex tenetu
 section2: Necessitatibus qui e
 footer:
-  text: "Nisi natus in amet "
-  links: Numquam et officia t
+  text: SignIn
+  links: /sign-in
 ---
