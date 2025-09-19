@@ -58,14 +58,14 @@ content:
       - { name: body, label: Body, type: rich-text }
 
   # Subscription Section (single file)
-  - name: subscription
-    label: Subscription
-    type: file
-    path: content/pages/subscription.md
-    fields:
-      - { name: title, label: Title, type: string }
-      - { name: description, label: Description, type: text }
-      - { name: buttonLabel, label: Button Label, type: string }
+  # - name: subscription
+  #   label: Subscription
+  #   type: file
+  #   path: content/pages/subscription.md
+  #   fields:
+  #     - { name: title, label: Title, type: string }
+  #     - { name: description, label: Description, type: text }
+  #     - { name: buttonLabel, label: Button Label, type: string }
 
   # Footer Section (single file, with repeatable links)
   - name: footer
