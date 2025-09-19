@@ -1,53 +1,16 @@
-content:
-  - name: landing
-    label: "Landing Page"
-    type: file
-    path: "content/pages/landing.md"
-    fields:
-      # =============================
-      # Section 1: Hero Section
-      # =============================
-      - name: hero
-        label: Hero Section
-        type: object
-        fields:
-          - { name: title, label: Title, type: string, required: true }
-          - { name: description, label: Description, type: text, required: true }
-          - { name: backgroundImage, label: Background Image, type: image, required: false }
-          - name: cta
-            label: CTA Button
-            type: object
-            required: false
-            fields:
-              - { name: label, label: Button Label, type: string }
-              - { name: url, label: Redirect URL, type: string }
+---
+title: "Build SaaS Faster"
+description: "Kickstart your startup with our Next.js starter kit."
+cta:
+  label: "Get Started"
+  url: "/signup"
 
-      # =============================
-      # Section 2: Features Section
-      # =============================
-      - name: features
-        label: Features Section
-        type: list
-        labelField: text     # 👈 show the feature title in UI
-        fields:
-          - { name: text, label: Feature Title, type: string, required: true }
-          - { name: description, label: Description, type: text, required: true }
-          - { name: image, label: Image, type: image, required: false }
-          - name: cta
-            label: CTA Button
-            type: object
-            required: false
-            fields:
-              - { name: label, label: Button Label, type: string }
-              - { name: url, label: Redirect URL, type: string }
+todos:
+  - task: "Set up project repo"
+    done: true
+  - task: "Install dependencies"
+    done: true
+  - task: "Deploy to Vercel"
+    done: false
+---
 
-      # =============================
-      # Section 3: Footer Links
-      # =============================
-      - name: footer
-        label: Footer Links
-        type: list
-        labelField: label    # 👈 show the footer link label in UI
-        fields:
-          - { name: label, label: Link Label, type: string, required: true }
-          - { name: url, label: Link URL, type: string, required: true }
