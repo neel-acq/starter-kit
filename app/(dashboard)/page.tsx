@@ -72,8 +72,6 @@ function Features({ features }: { features: any[] }) {
 }
 
 function BlogList({ blogs }: { blogs: any[] }) {
-  console.log(blogs, "blogs");
-
   return (
     <section className="py-20 bg-gray-50">
       <div className="container mx-auto px-6">

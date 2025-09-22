@@ -41,6 +41,9 @@ function UserMenu() {
         <Button asChild className="rounded-full">
           <Link href="/sign-up">Sign Up</Link>
         </Button>
+        <Button asChild className="rounded-full">
+          <Link href="/sign-in">Sign In</Link>
+        </Button>
       </>
     );
   }
@@ -83,7 +86,7 @@ function Header() {
     <header className="border-b border-gray-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
         <Link href="/" className="flex items-center">
-          <CircleIcon className="h-6 w-6 text-orange-500" />
+          {/* <CircleIcon className="h-6 w-6 text-orange-500" /> */}
           <span className="ml-2 text-xl font-semibold text-gray-900">SaaS-Next Js</span>
         </Link>
         <div className="flex items-center space-x-4">

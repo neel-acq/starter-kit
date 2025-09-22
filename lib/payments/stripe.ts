@@ -23,12 +23,6 @@ export async function createCheckoutSession({
   if (!team || !user) {
     redirect(`/sign-up?redirect=checkout&priceId=${priceId}`);
   }
-  console.log(
-    team,
-    user,
-    "priceId user team",
-    "price_1S8KnZFqZGEEzMD67KQtyU8X"
-  );
 
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ["card"],
