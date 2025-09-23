@@ -117,7 +117,7 @@ export const signUp = validatedAction(signUpSchema, async (data, formData) => {
 
   if (existingUser.length > 0) {
     return {
-      error: "Failed to create user. Please try again.",
+      error: "User already exists. Please try logging in instead.",
       email,
       password,
     };

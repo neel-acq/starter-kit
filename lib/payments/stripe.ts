@@ -8,11 +8,13 @@ import {
 } from "@/lib/db/queries";
 
 // Use dynamic BASE_URL based on environment or fallback to localhost for development
-const baseUrl =
-  process.env.NEXT_PUBLIC_BASE_URL ||
-  (process.env.NODE_ENV === "production"
-    ? "https://misfocused-nonethnically-debbie.ngrok-free.app"
-    : "http://localhost:3000");
+// const baseUrl =
+//   process.env.NEXT_PUBLIC_BASE_URL ||
+//   (process.env.NODE_ENV === "production"
+//     ? "https://misfocused-nonethnically-debbie.ngrok-free.app"
+//     : "http://localhost:3000");
+
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 
 export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2025-08-27.basil",
@@ -152,8 +154,8 @@ export async function handleSubscriptionChange(
 
   if (status === "active" || status === "trialing") {
     const plan = subscription.items.data[0]?.plan;
-    console.log(plan,"plan");
-    
+    console.log(plan, "plan");
+
     // Use current_period_end if available, otherwise use a default date
     const endDate = (subscription as any).current_period_end
       ? new Date((subscription as any).current_period_end * 1000)
