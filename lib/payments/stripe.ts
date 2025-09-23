@@ -19,7 +19,6 @@ const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2025-08-27.basil",
 });
-console.log(baseUrl, "baseUrl");
 
 export async function createCheckoutSession({
   team,
@@ -52,13 +51,11 @@ export async function createCheckoutSession({
       trial_period_days: 14,
     },
   });
-  console.log(session.url, "session.url");
 
   redirect(session.url!);
 }
 
 export async function createCustomerPortalSession(team: Team) {
-  console.log(team, "team createCustomerPortalSession");
 
   if (!team.stripeCustomerId || !team.stripeProductId) {
     redirect("/pricing");
@@ -119,14 +116,6 @@ export async function createCustomerPortalSession(team: Team) {
       },
     });
   }
-  console.log(
-    {
-      customer: team.stripeCustomerId,
-      return_url: `${baseUrl}/dashboard`,
-      configuration: configuration.id,
-    },
-    "return"
-  );
 
   return stripe.billingPortal.sessions.create({
     customer: team.stripeCustomerId,
@@ -138,7 +127,6 @@ export async function createCustomerPortalSession(team: Team) {
 export async function handleSubscriptionChange(
   subscription: Stripe.Subscription
 ) {
-  console.log("handleSubscriptionChange subscription:", subscription);
 
   const customerId = subscription.customer as string;
   const subscriptionId = subscription.id;
@@ -150,17 +138,14 @@ export async function handleSubscriptionChange(
     console.error("Team not found for Stripe customer:", customerId);
     return;
   }
-  console.log(status, "status");
 
   if (status === "active" || status === "trialing") {
     const plan = subscription.items.data[0]?.plan;
-    console.log(plan, "plan");
 
     // Use current_period_end if available, otherwise use a default date
     const endDate = (subscription as any).current_period_end
       ? new Date((subscription as any).current_period_end * 1000)
       : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // 30 days from now as fallback
-    console.log(endDate, "endDate");
 
     await updateTeamSubscription(team.id, {
       stripeSubscriptionId: subscriptionId,
@@ -170,7 +155,6 @@ export async function handleSubscriptionChange(
       subscriptionEndDate: endDate,
     });
   } else if (status === "canceled" || status === "unpaid") {
-    console.log("else if ");
 
     await updateTeamSubscription(team.id, {
       stripeSubscriptionId: null,

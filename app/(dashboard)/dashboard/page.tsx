@@ -10,7 +10,7 @@ import {
   CardFooter
 } from '@/components/ui/card';
 import { customerPortalAction } from '@/lib/payments/actions';
-import { useActionState } from 'react';
+import { useActionState, useTransition } from 'react';
 import { TeamDataWithMembers, User } from '@/lib/db/schema';
 import { removeTeamMember, inviteTeamMember } from '@/app/(login)/actions';
 import useSWR from 'swr';
@@ -39,6 +39,13 @@ function SubscriptionSkeleton() {
 
 function ManageSubscription() {
   const { data: teamData } = useSWR<TeamDataWithMembers>('/api/team', fetcher);
+  const [isPending, startTransition] = useTransition();
+
+  const handleSubmit = (formData: FormData) => {
+    startTransition(async () => {
+      await customerPortalAction(formData);
+    });
+  };
 
   return (
     <Card className="mb-8">
@@ -60,9 +67,21 @@ function ManageSubscription() {
                   : 'No active subscription'}
               </p>
             </div>
-            <form action={customerPortalAction}>
-              <Button className="button-color" type="submit" variant="outline">
-                Manage Subscription
+            <form action={handleSubmit}>
+              <Button
+                className="button-color"
+                type="submit"
+                variant="outline"
+                disabled={isPending}
+              >
+                {isPending ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Loading...
+                  </>
+                ) : (
+                  'Manage Subscription'
+                )}
               </Button>
             </form>
           </div>

@@ -60,9 +60,7 @@ export async function sendInvitationEmail(data: InvitationEmailData): Promise<vo
   };
 
   try {
-    let response  =await transporter.sendMail(mailOptions);
-    console.log(response,"response");
-    
+    await transporter.sendMail(mailOptions);
     console.log(`Invitation email sent to ${email}`);
   } catch (error) {
     console.error('Error sending invitation email:', error);

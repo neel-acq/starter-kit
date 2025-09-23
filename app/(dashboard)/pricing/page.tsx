@@ -11,8 +11,6 @@ export default async function PricingPage() {
     getStripePrices(),
     getStripeProducts(),
   ]);
-  console.log(prices, "prices");
-  console.log(products, "products");
 
   const basePlan = products.find((product) => product.name === "Base");
   const plusPlan = products.find((product) => product.name === "Plus");

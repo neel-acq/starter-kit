@@ -9,7 +9,6 @@ import Stripe from "stripe";
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
   const sessionId = searchParams.get("session_id");
-  console.log(sessionId, "sessionId");
 
   if (!sessionId) {
     return NextResponse.redirect(new URL("/pricing", request.url));
@@ -96,21 +95,8 @@ export async function GET(request: NextRequest) {
       .where(eq(teams.id, userTeam[0].teamId));
 
     await setSession(user[0]);
-    console.log(
-      {
-        stripeCustomerId: customerId,
-        stripeSubscriptionId: subscriptionId,
-        stripeProductId: productId,
-        planName: (plan.product as Stripe.Product).name,
-        subscriptionStatus: subscription.status,
-        subscriptionEndDate: subscriptionEndDate,
-        updatedAt: new Date(),
-      },
-      "Subscription"
-    );
 
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL!;
-    console.log(baseUrl, "baseUrl===");
 
     return NextResponse.redirect(new URL("/dashboard", baseUrl));
   } catch (error) {
