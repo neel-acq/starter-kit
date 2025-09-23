@@ -116,7 +116,7 @@ const TagInput: React.FC<TagInputProps> = React.memo(({ tags, onChange }) => {
           <Button
             variant="ghost"
             size="sm"
-            className="h-4 w-4 p-0"
+            className="h-4 w-4 p-0 button-color"
             onClick={() => removeTag(index)}
           >
             <Trash2 className="h-3 w-3" />

@@ -21,6 +21,7 @@ import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import { createCheckoutSession } from "@/lib/payments/stripe";
 import { getUser, getUserWithTeam } from "@/lib/db/queries";
+import { sendInvitationEmail } from "@/lib/email";
 import {
   validatedAction,
   validatedActionWithUser,
@@ -376,7 +377,7 @@ export const removeTeamMember = validatedActionWithUser(
       .delete(teamMembers)
       .where(
         and(
-          eq(teamMembers.id, memberId),
+          eq(teamMembers.id, Number(memberId)),
           eq(teamMembers.teamId, userWithTeam.teamId)
         )
       );
@@ -437,13 +438,13 @@ export const inviteTeamMember = validatedActionWithUser(
     }
 
     // Create a new invitation
-    await db.insert(invitations).values({
+    const [newInvitation] = await db.insert(invitations).values({
       teamId: userWithTeam.teamId,
       email,
       role,
       invitedBy: user.id,
       status: "pending",
-    });
+    }).returning();
 
     await logActivity(
       userWithTeam.teamId,
@@ -451,8 +452,21 @@ export const inviteTeamMember = validatedActionWithUser(
       ActivityType.INVITE_TEAM_MEMBER
     );
 
-    // TODO: Send invitation email and include ?inviteId={id} to sign-up URL
-    // await sendInvitationEmail(email, userWithTeam.team.name, role)
+    // Send invitation email and include ?inviteId={id} to sign-up URL
+    const [team] = await db
+      .select()
+      .from(teams)
+      .where(eq(teams.id, userWithTeam.teamId))
+      .limit(1);
+
+    const signUpUrl = `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/sign-up`;
+    await sendInvitationEmail({
+      email,
+      teamName: team.name,
+      role,
+      inviteId: newInvitation.id.toString(),
+      signUpUrl,
+    });
 
     return { success: "Invitation sent successfully" };
   }

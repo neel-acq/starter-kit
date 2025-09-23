@@ -61,7 +61,7 @@ function ManageSubscription() {
               </p>
             </div>
             <form action={customerPortalAction}>
-              <Button type="submit" variant="outline">
+              <Button className="button-color" type="submit" variant="outline">
                 Manage Subscription
               </Button>
             </form>
@@ -153,7 +153,7 @@ function TeamMembers() {
                   </p>
                 </div>
               </div>
-              {index > 1 ? (
+              {/* {index > 1 ? (
                 <form action={removeAction}>
                   <input type="hidden" name="memberId" value={member.id} />
                   <Button
@@ -165,7 +165,7 @@ function TeamMembers() {
                     {isRemovePending ? 'Removing...' : 'Remove'}
                   </Button>
                 </form>
-              ) : null}
+              ) : null} */}
             </li>
           ))}
         </ul>
@@ -241,7 +241,7 @@ function InviteTeamMember() {
           )}
           <Button
             type="submit"
-            className="bg-orange-500 hover:bg-orange-600 text-white"
+            className="bg-orange-500 hover:bg-orange-600 text-white button-color"
             disabled={isInvitePending || !isOwner}
           >
             {isInvitePending ? (

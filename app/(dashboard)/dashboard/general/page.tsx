@@ -101,7 +101,7 @@ export default function GeneralPage() {
             )}
             <Button
               type="submit"
-              className="bg-orange-500 hover:bg-orange-600 text-white"
+              className="bg-orange-500 hover:bg-orange-600 text-white button-color"
               disabled={isPending}
             >
               {isPending ? (

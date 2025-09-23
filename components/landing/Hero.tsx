@@ -24,7 +24,7 @@ export const Hero: React.FC = () => {
               <a href="#pricing">
                 <Button
                   size="lg"
-                  className="rounded-full bg-white text-orange-600"
+                  className="rounded-full bg-white text-orange-600 button-color"
                 >
                   Get started
                   <ArrowRight className="ml-2 h-5 w-5" />
@@ -37,7 +37,7 @@ export const Hero: React.FC = () => {
                 <Button
                   variant="ghost"
                   size="lg"
-                  className="rounded-full text-white/95"
+                  className="rounded-full text-white/95 button-color"
                 >
                   Read our blog
                 </Button>

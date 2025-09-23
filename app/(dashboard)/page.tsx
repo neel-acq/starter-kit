@@ -25,7 +25,7 @@ function Hero({ data }: { data: any }) {
         {data.cta && (
           <a
             href={data.cta.url || "#"}
-            className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-lg shadow-lg transition"
+            className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 shadow-lg transition rounded-full button-color"
           >
             {data.cta.label || "Get Started"}
           </a>
@@ -114,7 +114,7 @@ function PricingPlans({ data }: { data: any }) {
         <p className="text-lg text-gray-600 mb-10">
           {data.description || "Join our community today."}
         </p>
-        <button className="bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-8 rounded-lg shadow-md transition">
+        <button className="bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-8 rounded-lg shadow-md transition button-color">
           {data.buttonLabel || "Subscribe"}
         </button>
       </div>

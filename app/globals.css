@@ -297,3 +297,8 @@
     @apply bg-background text-foreground;
   }
 }
+
+
+.button-color {
+  @apply bg-blue-600 hover:bg-blue-700 text-white;
+}

@@ -71,7 +71,7 @@ export const ContactForm: React.FC = () => {
             <button
               type="submit"
               disabled={!canSend || status === "sending"}
-              className="inline-flex items-center px-4 py-2 bg-orange-600 text-white rounded-full disabled:opacity-50"
+              className="inline-flex items-center px-4 py-2 bg-orange-600 text-white rounded-full disabled:opacity-50 button-color"
             >
               {status === "sending" ? "Sending..." : "Send message"}
             </button>

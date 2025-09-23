@@ -21,7 +21,7 @@ export default function DashboardLayout({
     { href: '/dashboard/general', icon: Settings, label: 'General' },
     { href: '/dashboard/activity', icon: Activity, label: 'Activity' },
     { href: '/dashboard/security', icon: Shield, label: 'Security' },
-    { href: '/dashboard/subscription', icon: CreditCard, label: 'Subscription' }
+    // { href: '/dashboard/subscription', icon: CreditCard, label: 'Subscription' }
   ];
 
   return (
@@ -32,7 +32,7 @@ export default function DashboardLayout({
           <span className="font-medium">Settings</span>
         </div>
         <Button
-          className="-mr-3"
+          className="-mr-3 button-color"
           variant="ghost"
           onClick={() => setIsSidebarOpen(!isSidebarOpen)}
         >
@@ -57,7 +57,7 @@ export default function DashboardLayout({
                   variant={pathname === item.href ? 'secondary' : 'ghost'}
                   className={`shadow-none my-1 w-full justify-start ${
                     pathname === item.href ? 'bg-gray-100' : ''
-                  }`}
+                  } button-color`}
                   onClick={() => setIsSidebarOpen(false)}
                 >
                   <item.icon className="h-4 w-4" />
