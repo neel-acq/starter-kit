@@ -7,9 +7,17 @@ import {
   updateTeamSubscription,
 } from "@/lib/db/queries";
 
+// Use dynamic BASE_URL based on environment or fallback to localhost for development
+const baseUrl =
+  process.env.NEXT_PUBLIC_BASE_URL ||
+  (process.env.NODE_ENV === "production"
+    ? "https://misfocused-nonethnically-debbie.ngrok-free.app"
+    : "http://localhost:3000");
+
 export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: "2025-04-30.basil",
+  apiVersion: "2025-08-27.basil",
 });
+console.log(baseUrl, "baseUrl");
 
 export async function createCheckoutSession({
   team,
@@ -33,8 +41,8 @@ export async function createCheckoutSession({
       },
     ],
     mode: "subscription",
-    success_url: `${process.env.BASE_URL}/api/stripe/checkout?session_id={CHECKOUT_SESSION_ID}`,
-    cancel_url: `${process.env.BASE_URL}/pricing`,
+    success_url: `${baseUrl}/api/stripe/checkout?session_id={CHECKOUT_SESSION_ID}`,
+    cancel_url: `${baseUrl}/pricing`,
     customer: team.stripeCustomerId || undefined,
     client_reference_id: user.id.toString(),
     allow_promotion_codes: true,
@@ -42,11 +50,14 @@ export async function createCheckoutSession({
       trial_period_days: 14,
     },
   });
+  console.log(session.url, "session.url");
 
   redirect(session.url!);
 }
 
 export async function createCustomerPortalSession(team: Team) {
+  console.log(team, "team createCustomerPortalSession");
+
   if (!team.stripeCustomerId || !team.stripeProductId) {
     redirect("/pricing");
   }
@@ -106,10 +117,18 @@ export async function createCustomerPortalSession(team: Team) {
       },
     });
   }
+  console.log(
+    {
+      customer: team.stripeCustomerId,
+      return_url: `${baseUrl}/dashboard`,
+      configuration: configuration.id,
+    },
+    "return"
+  );
 
   return stripe.billingPortal.sessions.create({
     customer: team.stripeCustomerId,
-    return_url: `${process.env.BASE_URL}/dashboard`,
+    return_url: `${baseUrl}/dashboard`,
     configuration: configuration.id,
   });
 }
@@ -117,6 +136,8 @@ export async function createCustomerPortalSession(team: Team) {
 export async function handleSubscriptionChange(
   subscription: Stripe.Subscription
 ) {
+  console.log("handleSubscriptionChange subscription:", subscription);
+
   const customerId = subscription.customer as string;
   const subscriptionId = subscription.id;
   const status = subscription.status;
@@ -127,21 +148,34 @@ export async function handleSubscriptionChange(
     console.error("Team not found for Stripe customer:", customerId);
     return;
   }
+  console.log(status, "status");
 
   if (status === "active" || status === "trialing") {
     const plan = subscription.items.data[0]?.plan;
+    console.log(plan,"plan");
+    
+    // Use current_period_end if available, otherwise use a default date
+    const endDate = (subscription as any).current_period_end
+      ? new Date((subscription as any).current_period_end * 1000)
+      : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // 30 days from now as fallback
+    console.log(endDate, "endDate");
+
     await updateTeamSubscription(team.id, {
       stripeSubscriptionId: subscriptionId,
       stripeProductId: plan?.product as string,
       planName: (plan?.product as Stripe.Product).name,
       subscriptionStatus: status,
+      subscriptionEndDate: endDate,
     });
   } else if (status === "canceled" || status === "unpaid") {
+    console.log("else if ");
+
     await updateTeamSubscription(team.id, {
       stripeSubscriptionId: null,
       stripeProductId: null,
       planName: null,
       subscriptionStatus: status,
+      subscriptionEndDate: null,
     });
   }
 }

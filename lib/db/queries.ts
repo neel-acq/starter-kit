@@ -60,6 +60,7 @@ export async function updateTeamSubscription(
     stripeProductId: string | null;
     planName: string | null;
     subscriptionStatus: string;
+    subscriptionEndDate?: Date | null;
   }
 ) {
   await db
@@ -297,4 +298,43 @@ export async function updateBlog(
 
 export async function deleteBlog(id: number) {
   await db.delete(blogs).where(eq(blogs.id, id));
+}
+
+// Subscription queries
+
+export async function getSubscriptions() {
+  const user = await getUser();
+  if (!user) {
+    throw new Error("User not authenticated");
+  }
+
+  const result = await db.query.teams.findMany({
+    columns: {
+      id: true,
+      name: true,
+      planName: true,
+      subscriptionStatus: true,
+      stripeCustomerId: true,
+      stripeSubscriptionId: true,
+      createdAt: true,
+      updatedAt: true,
+      subscriptionEndDate: true,
+    },
+    with: {
+      teamMembers: {
+        with: {
+          user: {
+            columns: {
+              id: true,
+              name: true,
+              email: true,
+            },
+          },
+        },
+      },
+    },
+    orderBy: desc(teams.createdAt),
+  });
+
+  return result;
 }
