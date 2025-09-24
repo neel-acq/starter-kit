@@ -22,8 +22,8 @@ export async function POST(request: NextRequest) {
 
   switch (event.type) {
     case 'customer.subscription.created':
-    // case 'checkout.session.completed':
-    // case 'invoice.payment_succeeded':
+    case 'checkout.session.completed':
+    case 'invoice.payment_succeeded':
     case 'customer.subscription.updated':
     case 'customer.subscription.deleted':
       const subscription = event.data.object as Stripe.Subscription;

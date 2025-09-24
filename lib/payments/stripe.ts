@@ -143,14 +143,17 @@ export async function handleSubscriptionChange(
     const plan = subscription.items.data[0]?.plan;
 
     // Use current_period_end if available, otherwise use a default date
-    const endDate = (subscription as any).current_period_end
-      ? new Date((subscription as any).current_period_end * 1000)
-      : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // 30 days from now as fallback
+    // const endDate = (subscription as any).current_period_end
+    //   ? new Date((subscription as any).current_period_end * 1000)
+    //   : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // 30 days from now as fallback
+
+    const endDate = plan?.product=="prod_T4TpkYLXXKeg1e"?new Date(Date.now() + 12 * 30 * 24 * 60 * 60 * 1000):new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
 
     await updateTeamSubscription(team.id, {
       stripeSubscriptionId: subscriptionId,
       stripeProductId: plan?.product as string,
-      planName: (plan?.product as Stripe.Product).name,
+      planName: plan?.product=="prod_T4TpkYLXXKeg1e"?"Plus":"Base",
+      // planName: (plan?.product as Stripe.Product).name,
       subscriptionStatus: status,
       subscriptionEndDate: endDate,
     });
